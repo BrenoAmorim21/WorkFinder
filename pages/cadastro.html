@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro — FreeLink</title>
+ <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-container auth-container--wide">
+
+    <div class="brand brand--small">
+      <div class="brand-logo">FL</div>
+      <h1 class="brand-name">FreeLink</h1>
+    </div>
+
+    <div class="card auth-card auth-card--wide">
+
+      <!-- Passo 1: Escolha do tipo -->
+      <div id="step-tipo" class="step active">
+        <h2 class="card-title">Qual é o seu perfil?</h2>
+        <p class="card-subtitle">Escolha como você quer usar a plataforma</p>
+
+        <div class="tipo-grid">
+          <button class="tipo-card" id="btn-empresa" onclick="selecionarTipo('empresa')">
+            <span class="tipo-icon">🏢</span>
+            <span class="tipo-label">Sou uma Empresa</span>
+            <span class="tipo-desc">Quero publicar vagas e projetos para contratar freelancers</span>
+          </button>
+          <button class="tipo-card" id="btn-freelancer" onclick="selecionarTipo('freelancer')">
+            <span class="tipo-icon">💼</span>
+            <span class="tipo-label">Sou Freelancer</span>
+            <span class="tipo-desc">Quero encontrar projetos e oportunidades de trabalho</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Passo 2a: Dados da Empresa -->
+      <div id="step-empresa" class="step hidden">
+        <div class="step-header">
+          <button class="btn-back" onclick="voltarTipo()">← Voltar</button>
+          <h2 class="card-title">Cadastro de Empresa</h2>
+        </div>
+
+        <div id="msg-error-empresa" class="msg msg-error hidden"></div>
+
+        <form id="form-empresa" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome-empresa">Nome da empresa *</label>
+              <input type="text" id="nome-empresa" name="nome_empresa" placeholder="Ex: Acme Soluções Ltda" required />
+            </div>
+            <div class="form-group">
+              <label for="cnpj">CNPJ *</label>
+              <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0001-00" required maxlength="18" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="setor">Setor *</label>
+              <select id="setor" name="setor" required>
+                <option value="">Selecione...</option>
+                <option>Tecnologia</option>
+                <option>Design</option>
+                <option>Marketing</option>
+                <option>Saúde</option>
+                <option>Educação</option>
+                <option>Finanças</option>
+                <option>Construção</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tamanho">Tamanho da empresa</label>
+              <select id="tamanho" name="tamanho">
+                <option value="">Selecione...</option>
+                <option>1–10 funcionários</option>
+                <option>11–50 funcionários</option>
+                <option>51–200 funcionários</option>
+                <option>200+ funcionários</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-empresa">E-mail corporativo *</label>
+            <input type="email" id="email-empresa" name="email" placeholder="contato@suaempresa.com" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="senha-empresa">Senha *</label>
+              <input type="password" id="senha-empresa" name="senha" placeholder="Mínimo 8 caracteres" required minlength="8" />
+            </div>
+            <div class="form-group">
+              <label for="senha-conf-empresa">Confirmar senha *</label>
+              <input type="password" id="senha-conf-empresa" name="senha_conf" placeholder="Repita a senha" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="desc-empresa">Descrição da empresa</label>
+            <textarea id="desc-empresa" name="descricao" rows="3" placeholder="Conte um pouco sobre sua empresa..."></textarea>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="termos-empresa" name="termos" required />
+            <label for="termos-empresa">Aceito os <a href="#">termos de uso</a> e a <a href="#">política de privacidade</a></label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">Criar conta da empresa</button>
+        </form>
+      </div>
+
+      <!-- Passo 2b: Dados do Freelancer -->
+      <div id="step-freelancer" class="step hidden">
+        <div class="step-header">
+          <button class="btn-back" onclick="voltarTipo()">← Voltar</button>
+          <h2 class="card-title">Cadastro de Freelancer</h2>
+        </div>
+
+        <div id="msg-error-freelancer" class="msg msg-error hidden"></div>
+
+        <form id="form-freelancer" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome-free">Nome completo *</label>
+              <input type="text" id="nome-free" name="nome" placeholder="Seu nome completo" required />
+            </div>
+            <div class="form-group">
+              <label for="cpf">CPF *</label>
+              <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required maxlength="14" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="area">Área de atuação *</label>
+              <select id="area" name="area" required>
+                <option value="">Selecione...</option>
+                <option>Desenvolvimento Web</option>
+                <option>Desenvolvimento Mobile</option>
+                <option>Design Gráfico / UI·UX</option>
+                <option>Marketing Digital</option>
+                <option>Redação / Copywriting</option>
+                <option>Dados / BI</option>
+                <option>DevOps / Infra</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="experiencia">Nível de experiência</label>
+              <select id="experiencia" name="experiencia">
+                <option value="">Selecione...</option>
+                <option>Júnior (0–2 anos)</option>
+                <option>Pleno (2–5 anos)</option>
+                <option>Sênior (5+ anos)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-free">E-mail *</label>
+            <input type="email" id="email-free" name="email" placeholder="voce@email.com" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="senha-free">Senha *</label>
+              <input type="password" id="senha-free" name="senha" placeholder="Mínimo 8 caracteres" required minlength="8" />
+            </div>
+            <div class="form-group">
+              <label for="senha-conf-free">Confirmar senha *</label>
+              <input type="password" id="senha-conf-free" name="senha_conf" placeholder="Repita a senha" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="habilidades">Principais habilidades</label>
+            <input type="text" id="habilidades" name="habilidades" placeholder="Ex: Python, React, Figma, SEO..." />
+            <small class="form-hint">Separe por vírgulas</small>
+          </div>
+
+          <div class="form-group">
+            <label for="portfolio">Link do portfólio / LinkedIn</label>
+            <input type="url" id="portfolio" name="portfolio" placeholder="https://..." />
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="termos-free" name="termos" required />
+            <label for="termos-free">Aceito os <a href="#">termos de uso</a> e a <a href="#">política de privacidade</a></label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">Criar minha conta</button>
+        </form>
+      </div>
+
+    </div>
+
+    <p class="auth-footer">
+      Já tem conta? <a href="../index.html">Entrar</a>
+    </p>
+
+  </div>
+
+<script src="../js/auth.js"></script>
+</body>
+</html>

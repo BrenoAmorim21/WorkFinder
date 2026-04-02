@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorar Projetos — FreeLink</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <style>
+    /* ── Variáveis ── */
+    :root {
+      --brand:       #1A56DB;
+      --brand-soft:  #EBF2FF;
+      --brand-dark:  #1039A0;
+      --green:       #059669;
+      --green-soft:  #D1FAE5;
+      --amber:       #D97706;
+      --amber-soft:  #FEF3C7;
+      --red-soft:    #FEE2E2;
+      --red:         #DC2626;
+      --ink:         #0E1726;
+      --ink-mid:     #4A5568;
+      --ink-light:   #718096;
+      --border:      #E2E8F0;
+      --surface:     #F7F9FC;
+      --white:       #FFFFFF;
+      --radius:      12px;
+      --shadow:      0 2px 12px rgba(14,23,38,.07);
+      --shadow-lg:   0 8px 32px rgba(14,23,38,.12);
+      --font-body:   'DM Sans', sans-serif;
+      --font-serif:  'DM Serif Display', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--surface);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: var(--brand);
+      color: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .nav-search {
+      flex: 1;
+      max-width: 420px;
+      position: relative;
+    }
+
+    .nav-search input {
+      width: 100%;
+      padding: .5rem 1rem .5rem 2.5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: .9rem;
+      background: var(--surface);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .nav-search input:focus { border-color: var(--brand); background: #fff; }
+
+    .nav-search svg {
+      position: absolute;
+      left: .85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px; height: 15px;
+      stroke: var(--ink-light);
+    }
+
+    .nav-actions { display: flex; align-items: center; gap: .75rem; }
+
+    .btn-nav {
+      padding: .42rem 1rem;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: .18s;
+      white-space: nowrap;
+    }
+
+    .btn-nav-ghost {
+      background: none;
+      color: var(--ink-mid);
+    }
+    .btn-nav-ghost:hover { background: var(--surface); color: var(--ink); }
+
+    .btn-nav-primary {
+      background: var(--brand);
+      color: #fff;
+    }
+    .btn-nav-primary:hover { background: var(--brand-dark); }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    /* ── Hero banner ── */
+    .hero {
+      background: linear-gradient(110deg, var(--ink) 0%, #1B2A4A 60%, #1A3A6C 100%);
+      color: #fff;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,86,219,.35) 0%, transparent 70%);
+      top: -200px; right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #93C5FD;
+      margin-bottom: .6rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.25;
+      margin-bottom: .75rem;
+    }
+
+    .hero p {
+      color: #94A3B8;
+      font-size: .95rem;
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat { text-align: center; }
+    .hero-stat-num { font-size: 1.5rem; font-weight: 600; color: #fff; }
+    .hero-stat-label { font-size: .78rem; color: #64748B; margin-top: .1rem; }
+
+    /* ── Layout principal ── */
+    .main-layout {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .main-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+
+    /* ── Sidebar ── */
+    .sidebar { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 1rem; }
+
+    .sidebar-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+
+    .sidebar-title {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 1rem;
+    }
+
+    .filter-group { margin-bottom: 1rem; }
+    .filter-group:last-child { margin-bottom: 0; }
+
+    .filter-label {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--ink-mid);
+      margin-bottom: .5rem;
+      display: block;
+    }
+
+    .filter-options { display: flex; flex-direction: column; gap: .35rem; }
+
+    .filter-opt {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .855rem;
+      color: var(--ink-mid);
+      cursor: pointer;
+      padding: .25rem .4rem;
+      border-radius: 6px;
+      transition: background .15s;
+    }
+
+    .filter-opt:hover { background: var(--surface); color: var(--ink); }
+    .filter-opt input { accent-color: var(--brand); }
+
+    .filter-opt .count {
+      margin-left: auto;
+      font-size: .75rem;
+      color: var(--ink-light);
+      background: var(--surface);
+      padding: .1rem .45rem;
+      border-radius: 999px;
+    }
+
+    /* ── Feed de projetos ── */
+    .feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+
+    .feed-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .feed-sort {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      color: var(--ink-mid);
+    }
+
+    .feed-sort select {
+      font-family: var(--font-body);
+      font-size: .85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .35rem .7rem;
+      color: var(--ink);
+      background: var(--white);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Chips de filtro rápido */
+    .chips {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .chip {
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--ink-mid);
+      transition: .15s;
+      white-space: nowrap;
+    }
+
+    .chip:hover, .chip.active {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    /* ── Card de projeto ── */
+    .project-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      cursor: pointer;
+      transition: box-shadow .2s, border-color .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: #C3D6F5;
+      transform: translateY(-2px);
+    }
+
+    .project-card.featured::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--brand);
+      border-radius: 3px 0 0 3px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .9rem;
+    }
+
+    .company-info { display: flex; align-items: center; gap: .7rem; }
+
+    .company-logo {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .company-name {
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--ink-mid);
+    }
+
+    .company-badge {
+      font-size: .7rem;
+      color: var(--green);
+      background: var(--green-soft);
+      padding: .1rem .45rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .card-bookmark {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-light);
+      padding: .25rem;
+      border-radius: 6px;
+      transition: .15s;
+      flex-shrink: 0;
+    }
+
+    .card-bookmark:hover { color: var(--brand); background: var(--brand-soft); }
+    .card-bookmark.saved { color: var(--brand); }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .5rem;
+      line-height: 1.35;
+    }
+
+    .card-desc {
+      font-size: .875rem;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .25rem .65rem;
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink-mid);
+      border: 1px solid var(--border);
+    }
+
+    .tag.highlight { background: var(--brand-soft); color: var(--brand); border-color: #BFDBFE; }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .8rem;
+      color: var(--ink-light);
+    }
+
+    .meta-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    .budget {
+      font-size: .95rem;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .badge {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .badge-remoto   { background: var(--green-soft);  color: var(--green); }
+    .badge-presencial{ background: var(--amber-soft); color: var(--amber); }
+    .badge-hibrido  { background: #EDE9FE;             color: #6D28D9; }
+    .badge-urgente  { background: var(--red-soft);     color: var(--red); }
+
+    .btn-apply {
+      padding: .45rem 1.1rem;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: .85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: .18s;
+      white-space: nowrap;
+    }
+
+    .btn-apply:hover { background: var(--brand-dark); }
+    .btn-apply:active { transform: scale(.97); }
+
+    /* ── Estado vazio ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--ink-light);
+    }
+
+    .empty-state p { margin-top: .5rem; font-size: .9rem; }
+
+    /* ── Paginação ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: .4rem;
+      margin-top: 2rem;
+    }
+
+    .page-btn {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-family: var(--font-body);
+      font-size: .875rem;
+      cursor: pointer;
+      transition: .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-mid);
+    }
+
+    .page-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .page-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+    /* ── Animação de entrada ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .project-card {
+      animation: fadeUp .35s ease both;
+    }
+
+    .project-card:nth-child(1) { animation-delay: .04s; }
+    .project-card:nth-child(2) { animation-delay: .08s; }
+    .project-card:nth-child(3) { animation-delay: .12s; }
+    .project-card:nth-child(4) { animation-delay: .16s; }
+    .project-card:nth-child(5) { animation-delay: .20s; }
+    .project-card:nth-child(6) { animation-delay: .24s; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar">
+    <a href="home.html" class="nav-brand">
+      <div class="nav-logo">FL</div>
+      FreeLink
+    </a>
+
+    <div class="nav-search">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0Z"/>
+      </svg>
+      <input type="text" id="search-input" placeholder="Buscar projetos, habilidades..." />
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-nav btn-nav-ghost" onclick="window.location.href='perfil-freelancer.html'">Meu Perfil</button>
+      <div class="avatar" onclick="window.location.href='perfil-freelancer.html'" title="Ver perfil">MV</div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Oportunidades disponíveis</div>
+    <h1>Encontre seu próximo projeto</h1>
+    <p>Conectamos freelancers talentosos às melhores empresas. Explore projetos e envie sua proposta.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">128</div>
+        <div class="hero-stat-label">projetos abertos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">47</div>
+        <div class="hero-stat-label">novos esta semana</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">R$180</div>
+        <div class="hero-stat-label">média por hora</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Layout ── -->
+  <div class="main-layout">
+
+    <!-- Sidebar de filtros -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Filtros</div>
+
+        <div class="filter-group">
+          <span class="filter-label">Modalidade</span>
+          <div class="filter-options">
+            <label class="filter-opt">
+              <input type="checkbox" checked /> Remoto <span class="count">84</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Presencial <span class="count">22</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Híbrido <span class="count">22</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Tipo</span>
+          <div class="filter-options">
+            <label class="filter-opt">
+              <input type="checkbox" checked /> Projeto pontual <span class="count">72</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" checked /> Freelance <span class="count">38</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Part-time <span class="count">18</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Área</span>
+          <div class="filter-options">
+            <label class="filter-opt">
+              <input type="checkbox" checked /> Dev Web <span class="count">51</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Design UI/UX <span class="count">30</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Mobile <span class="count">20</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Dados / BI <span class="count">15</span>
+            </label>
+            <label class="filter-opt">
+              <input type="checkbox" /> Marketing <span class="count">12</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Orçamento</div>
+        <div class="filter-options">
+          <label class="filter-opt"><input type="radio" name="budget" checked /> Qualquer valor</label>
+          <label class="filter-opt"><input type="radio" name="budget" /> Até R$ 2.000</label>
+          <label class="filter-opt"><input type="radio" name="budget" /> R$ 2k – R$ 10k</label>
+          <label class="filter-opt"><input type="radio" name="budget" /> R$ 10k – R$ 30k</label>
+          <label class="filter-opt"><input type="radio" name="budget" /> Acima de R$ 30k</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Feed principal -->
+    <main>
+      <div class="feed-header">
+        <span class="feed-title" id="feed-count">128 projetos encontrados</span>
+        <div class="feed-sort">
+          Ordenar por
+          <select id="sort-select">
+            <option>Mais recentes</option>
+            <option>Maior orçamento</option>
+            <option>Mais propostas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Chips de categoria rápida -->
+      <div class="chips">
+        <button class="chip active" onclick="filterChip(this, 'todos')">Todos</button>
+        <button class="chip" onclick="filterChip(this, 'Dev Web')">Dev Web</button>
+        <button class="chip" onclick="filterChip(this, 'Design')">Design UI/UX</button>
+        <button class="chip" onclick="filterChip(this, 'Mobile')">Mobile</button>
+        <button class="chip" onclick="filterChip(this, 'Dados')">Dados / BI</button>
+        <button class="chip" onclick="filterChip(this, 'Marketing')">Marketing</button>
+        <button class="chip" onclick="filterChip(this, 'DevOps')">DevOps</button>
+      </div>
+
+      <!-- Cards dos projetos -->
+      <div class="project-grid" id="project-grid"></div>
+
+      <!-- Paginação -->
+      <div class="pagination">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">›</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ── Mock data ──────────────────────────────────────────
+    const PROJETOS = [
+      {
+        id: 1,
+        titulo: 'Desenvolvimento de plataforma e-commerce em React + Node',
+        empresa: 'Lojafy Soluções',
+        logo: 'LJ',
+        logoColor: '#EBF2FF',
+        logoText: '#1A56DB',
+        verificada: true,
+        descricao: 'Precisamos de um desenvolvedor full-stack para criar do zero nossa plataforma de e-commerce. O projeto inclui catálogo de produtos, carrinho, checkout com pagamento e painel administrativo.',
+        tags: ['React', 'Node.js', 'MySQL', 'Stripe', 'TypeScript'],
+        area: 'Dev Web',
+        modalidade: 'remoto',
+        tipo: 'projeto',
+        orcamento: 'R$ 18.000 – R$ 25.000',
+        prazo: '60 dias',
+        propostas: 7,
+        publicado: 'há 2 dias',
+        urgente: false,
+        featured: true,
+      },
+      {
+        id: 2,
+        titulo: 'Designer UI/UX para redesign de aplicativo mobile',
+        empresa: 'FinTrack',
+        logo: 'FT',
+        logoColor: '#D1FAE5',
+        logoText: '#059669',
+        verificada: true,
+        descricao: 'Buscamos designer para reformular completamente a experiência do nosso app de finanças pessoais. Trabalho com prototipagem em Figma, testes de usabilidade e handoff para devs.',
+        tags: ['Figma', 'UI Design', 'UX Research', 'Design System'],
+        area: 'Design',
+        modalidade: 'remoto',
+        tipo: 'freelance',
+        orcamento: 'R$ 6.000 – R$ 10.000',
+        prazo: '30 dias',
+        propostas: 14,
+        publicado: 'há 3 dias',
+        urgente: false,
+        featured: false,
+      },
+      {
+        id: 3,
+        titulo: 'Desenvolvimento de app React Native — delivery de alimentos',
+        empresa: 'Sabor Express',
+        logo: 'SE',
+        logoColor: '#FEF3C7',
+        logoText: '#D97706',
+        verificada: false,
+        descricao: 'Projeto de app de delivery com funcionalidades de geolocalização, rastreamento de pedido em tempo real, integração com Pix e gestão de cardápio para restaurantes parceiros.',
+        tags: ['React Native', 'Firebase', 'Maps API', 'Pix API'],
+        area: 'Mobile',
+        modalidade: 'hibrido',
+        tipo: 'projeto',
+        orcamento: 'R$ 22.000 – R$ 35.000',
+        prazo: '90 dias',
+        propostas: 5,
+        publicado: 'há 1 dia',
+        urgente: true,
+        featured: false,
+      },
+      {
+        id: 4,
+        titulo: 'Cientista de dados para análise preditiva de churn',
+        empresa: 'SaaS Corp',
+        logo: 'SC',
+        logoColor: '#EDE9FE',
+        logoText: '#6D28D9',
+        verificada: true,
+        descricao: 'Precisamos modelar e implementar um pipeline de machine learning para prever cancelamentos de clientes. Trabalho inclui ETL, feature engineering, treinamento e deploy do modelo.',
+        tags: ['Python', 'Pandas', 'Scikit-learn', 'SQL', 'Power BI'],
+        area: 'Dados',
+        modalidade: 'remoto',
+        tipo: 'freelance',
+        orcamento: 'R$ 12.000 – R$ 18.000',
+        prazo: '45 dias',
+        propostas: 9,
+        publicado: 'há 5 dias',
+        urgente: false,
+        featured: true,
+      },
+      {
+        id: 5,
+        titulo: 'Desenvolvedor backend Python para API de integração IoT',
+        empresa: 'SmartHome BR',
+        logo: 'SH',
+        logoColor: '#FEE2E2',
+        logoText: '#DC2626',
+        verificada: false,
+        descricao: 'Desenvolvimento de API REST com Flask para integrar dispositivos IoT com nossa plataforma de automação residencial. Inclui autenticação, websockets e dashboard de monitoramento.',
+        tags: ['Python', 'Flask', 'MQTT', 'WebSockets', 'Docker'],
+        area: 'Dev Web',
+        modalidade: 'remoto',
+        tipo: 'projeto',
+        orcamento: 'R$ 8.000 – R$ 14.000',
+        prazo: '45 dias',
+        propostas: 11,
+        publicado: 'há 1 semana',
+        urgente: false,
+        featured: false,
+      },
+      {
+        id: 6,
+        titulo: 'Gestor de tráfego pago — campanhas Google e Meta Ads',
+        empresa: 'Crescer Digital',
+        logo: 'CD',
+        logoColor: '#ECFDF5',
+        logoText: '#047857',
+        verificada: true,
+        descricao: 'Busca por profissional para gerenciar campanhas de performance para 5 e-commerces clientes. Escopo inclui planejamento, criação, otimização e relatórios mensais de resultados.',
+        tags: ['Google Ads', 'Meta Ads', 'Analytics', 'CRO', 'Tag Manager'],
+        area: 'Marketing',
+        modalidade: 'remoto',
+        tipo: 'part-time',
+        orcamento: 'R$ 3.500 / mês',
+        prazo: 'Contrato 6 meses',
+        propostas: 22,
+        publicado: 'há 4 dias',
+        urgente: false,
+        featured: false,
+      },
+    ];
+
+    let filtroAtivo = 'todos';
+    let busca = '';
+
+    function badgeModalidade(m) {
+      const map = { remoto: 'badge-remoto', presencial: 'badge-presencial', hibrido: 'badge-hibrido' };
+      const label = { remoto: 'Remoto', presencial: 'Presencial', hibrido: 'Híbrido' };
+      return `<span class="badge ${map[m]}">${label[m]}</span>`;
+    }
+
+    function renderCard(p) {
+      const tagsHtml = p.tags
+        .map((t, i) => `<span class="tag ${i === 0 ? 'highlight' : ''}">${t}</span>`)
+        .join('');
+
+      return `
+        <div class="project-card ${p.featured ? 'featured' : ''}" onclick="abrirProjeto(${p.id})">
+          <div class="card-top">
+            <div class="company-info">
+              <div class="company-logo" style="background:${p.logoColor};color:${p.logoText}">${p.logo}</div>
+              <div>
+                <div class="company-name">${p.empresa}</div>
+                ${p.verificada ? '<span class="company-badge">✓ Verificada</span>' : ''}
+              </div>
+            </div>
+            <button class="card-bookmark" onclick="event.stopPropagation(); toggleSave(this)" title="Salvar projeto">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 3H7a2 2 0 0 0-2 2v16l7-3 7 3V5a2 2 0 0 0-2-2Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;">
+            ${p.urgente ? '<span class="badge badge-urgente">Urgente</span>' : ''}
+            ${badgeModalidade(p.modalidade)}
+          </div>
+
+          <div class="card-title">${p.titulo}</div>
+          <div class="card-desc">${p.descricao}</div>
+
+          <div class="card-tags">${tagsHtml}</div>
+
+          <div class="card-footer">
+            <div class="card-meta">
+              <span class="budget">${p.orcamento}</span>
+              <span class="meta-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2A10 10 0 1 1 2 12a10 10 0 0 1 20 0Z"/>
+                </svg>
+                ${p.prazo}
+              </span>
+              <span class="meta-item">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372c1.17 0 2.29-.203 3.316-.573M12 13.5a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7.5 8.375A9.375 9.375 0 0 1 12 13.5"/>
+                </svg>
+                ${p.propostas} propostas
+              </span>
+              <span class="meta-item">${p.publicado}</span>
+            </div>
+            <button class="btn-apply" onclick="event.stopPropagation(); enviarProposta(${p.id})">
+              Enviar proposta
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFeed() {
+      const grid = document.getElementById('project-grid');
+      let lista = PROJETOS;
+
+      if (filtroAtivo !== 'todos') {
+        lista = lista.filter(p => p.area === filtroAtivo);
+      }
+
+      if (busca.trim()) {
+        const q = busca.toLowerCase();
+        lista = lista.filter(p =>
+          p.titulo.toLowerCase().includes(q) ||
+          p.empresa.toLowerCase().includes(q) ||
+          p.tags.some(t => t.toLowerCase().includes(q))
+        );
+      }
+
+      document.getElementById('feed-count').textContent =
+        `${lista.length} projeto${lista.length !== 1 ? 's' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
+
+      if (lista.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size:2.5rem">🔍</div>
+            <p>Nenhum projeto encontrado com esses filtros.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = lista.map(renderCard).join('');
+    }
+
+    function filterChip(el, area) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      filtroAtivo = area;
+      renderFeed();
+    }
+
+    function toggleSave(btn) {
+      btn.classList.toggle('saved');
+    }
+
+    function abrirProjeto(id) {
+      // Futuramente: redirecionar para página de detalhe da vaga
+      alert(`Abrindo detalhes do projeto #${id}\n(Tela de detalhe será implementada em breve)`);
+    }
+
+    function enviarProposta(id) {
+      alert(`Enviando proposta para o projeto #${id}\n(Integração com API será implementada em breve)`);
+    }
+
+    // Busca ao digitar
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      busca = e.target.value;
+      renderFeed();
+    });
+
+    // Render inicial
+    renderFeed();
+  </script>
+</body>
+</html>

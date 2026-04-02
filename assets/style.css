@@ -1,0 +1,422 @@
+/* ============================================================
+   FreeLink — style.css
+   Design: moderno, profissional, inspirado em LinkedIn
+   ============================================================ */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Paleta de cores */
+  --primary:       #0A66C2;   /* azul LinkedIn */
+  --primary-dark:  #004182;
+  --primary-light: #E8F0FB;
+  --secondary:     #00A86B;   /* verde (empresa) */
+  --accent:        #F59E0B;   /* âmbar (destaque) */
+  --danger:        #DC2626;
+
+  /* Neutros */
+  --gray-50:  #F8FAFC;
+  --gray-100: #F1F5F9;
+  --gray-200: #E2E8F0;
+  --gray-300: #CBD5E1;
+  --gray-500: #64748B;
+  --gray-700: #334155;
+  --gray-900: #0F172A;
+
+  /* Layout */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.14);
+
+  /* Tipografia */
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--gray-900);
+  background: var(--gray-50);
+  line-height: 1.6;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- Layout da tela de Auth ---------- */
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--gray-50);
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 460px;
+  min-height: 100vh;
+}
+
+.auth-container--wide {
+  max-width: 680px;
+}
+
+.auth-hero {
+  flex: 1;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #1B7FD4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.stat-num {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .auth-hero { display: none; }
+  .auth-container { max-width: 100%; }
+}
+
+/* ---------- Branding ---------- */
+.brand {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.brand--small {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 1px;
+}
+
+.brand--small .brand-logo { width: 36px; height: 36px; font-size: 0.9rem; }
+
+.brand-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.5px;
+}
+
+.brand--small .brand-name { font-size: 1.35rem; }
+
+.brand-tagline {
+  color: var(--gray-500);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  width: 100%;
+}
+
+.auth-card--wide { padding: 2rem 2.5rem; }
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.card-subtitle {
+  color: var(--gray-500);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Forms ---------- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  color: var(--gray-900);
+  background: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.12);
+}
+
+input::placeholder, textarea::placeholder { color: var(--gray-300); }
+
+textarea { resize: vertical; }
+
+.input-wrapper { position: relative; }
+.input-wrapper input { padding-right: 2.5rem; }
+
+.btn-eye {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.6;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-eye:hover { opacity: 1; }
+
+.form-hint {
+  font-size: 0.78rem;
+  color: var(--gray-500);
+  margin-top: 0.2rem;
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--gray-700);
+}
+
+.form-check input[type="checkbox"] { margin-top: 2px; accent-color: var(--primary); }
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.1s;
+  text-decoration: none;
+}
+
+.btn:hover { text-decoration: none; }
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-outline:hover { background: var(--primary-light); }
+
+.btn-full { width: 100%; }
+
+.btn-back {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+}
+.btn-back:hover { color: var(--primary); }
+
+/* ---------- Divisor auth ---------- */
+.auth-divider {
+  text-align: center;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  margin: 1.25rem 0 1rem;
+  position: relative;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  display: inline-block;
+  width: 36%;
+  height: 1px;
+  background: var(--gray-200);
+  vertical-align: middle;
+  margin: 0 0.5rem;
+}
+
+/* ---------- Mensagens ---------- */
+.msg {
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.msg-error {
+  background: #FEF2F2;
+  color: var(--danger);
+  border: 1px solid #FECACA;
+}
+
+.msg-success {
+  background: #F0FDF4;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+/* ---------- Tipo de conta (seleção) ---------- */
+.tipo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 500px) {
+  .tipo-grid { grid-template-columns: 1fr; }
+}
+
+.tipo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 1.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  font-family: var(--font);
+}
+
+.tipo-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+  transform: translateY(-2px);
+}
+
+.tipo-icon { font-size: 2.2rem; }
+
+.tipo-label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--gray-900);
+}
+
+.tipo-desc {
+  font-size: 0.82rem;
+  color: var(--gray-500);
+  line-height: 1.4;
+}
+
+/* ---------- Steps ---------- */
+
+.step.hidden { display: none; }
+.step.active { display: block; }
+
+.step-header {
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Rodapé auth ---------- */
+.auth-footer {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  text-align: center;
+}
+
+/* ---------- Utilidades ---------- */
+.hidden { display: none !important; }

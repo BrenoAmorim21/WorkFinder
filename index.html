@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeLink — Conectando talentos e empresas</title>
+  <link rel="stylesheet" href="assets\style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    <!-- Logo / Branding -->
+    <div class="brand">
+      <div class="brand-logo">FL</div>
+      <h1 class="brand-name">FreeLink</h1>
+      <p class="brand-tagline">Conectando talentos e empresas</p>
+    </div>
+
+    <!-- Card de Login -->
+    <div class="card auth-card">
+      <h2 class="card-title">Entrar na plataforma</h2>
+
+      <div id="msg-error" class="msg msg-error hidden"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="seu@email.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" class="btn-eye" id="toggle-senha" aria-label="Mostrar senha">
+              👁
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="btn-login">
+          <span class="btn-text">Entrar</span>
+          <span class="btn-loading hidden">Carregando...</span>
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span>Não tem conta?</span>
+      </div>
+
+      <a href="pages/cadastro.html" class="btn btn-outline btn-full">
+        Criar conta gratuita
+      </a>
+    </div>
+
+    <!-- Rodapé da tela de auth -->
+    <p class="auth-footer">
+      ODS 8 · Trabalho Decente e Crescimento Econômico
+    </p>
+  </div>
+
+  <!-- Painel visual decorativo (lado direito em telas grandes) -->
+  <div class="auth-hero">
+    <div class="hero-content">
+      <div class="hero-stat">
+        <span class="stat-num">+500</span>
+        <span class="stat-label">projetos publicados</span>
+      </div>
+      <div class="hero-stat">
+        <span class="stat-num">+1.2k</span>
+        <span class="stat-label">freelancers ativos</span>
+      </div>
+      <div class="hero-stat">
+        <span class="stat-num">+300</span>
+        <span class="stat-label">empresas cadastradas</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
