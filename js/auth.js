@@ -1,5 +1,5 @@
 // ============================================================
-//  FreeLink — auth.js
+//  WorkFinder — auth.js
 // ============================================================
 
 const API_BASE = 'http://localhost:5000/api';
@@ -27,35 +27,35 @@ function setLoading(btnId, carregando) {
 }
 
 function salvarSessao(dados) {
-  localStorage.setItem('fl_token', dados.token);
-  localStorage.setItem('fl_tipo',  dados.tipo);
-  localStorage.setItem('fl_nome',  dados.nome);
-  localStorage.setItem('fl_id',    dados.id);
+  localStorage.setItem('wf_token', dados.token);
+  localStorage.setItem('wf_tipo',  dados.tipo);
+  localStorage.setItem('wf_nome',  dados.nome);
+  localStorage.setItem('wf_id',    dados.id);
 }
 
 function redirecionarDashboard(tipo) {
   const emPages = window.location.pathname.includes('/pages/');
   const base = emPages ? '' : 'pages/';
   if (tipo === 'empresa') {
-    window.location.href = base + 'dashboard-empresa.html';
+    window.location.href = base + 'dash_empresa.html';
   } else {
     window.location.href = base + 'home.html';
   }
 }
 
 function verificarSessao() {
-  const token = localStorage.getItem('fl_token');
-  const tipo  = localStorage.getItem('fl_tipo');
+  const token = localStorage.getItem('wf_token');
+  const tipo  = localStorage.getItem('wf_tipo');
   if (token && tipo) redirecionarDashboard(tipo);
 }
 
 // ─── MODO DEMO ───────────────────────────────────────────────
 // Usuários para testar sem o backend Flask rodando.
 // freelancer@demo.com / 12345678  → vai para home.html
-// empresa@demo.com    / 12345678  → vai para dashboard-empresa.html
+// empresa@demo.com    / 12345678  → vai para dash_empresa.html
 const DEMO_USERS = {
-  'freelancer@demo.com': { tipo: 'freelancer', nome: 'Mateus Vieira',    id: 1 },
-  'empresa@demo.com':    { tipo: 'empresa',    nome: 'Lojafy Soluções',  id: 2 },
+  'freelancer@demo.com': { tipo: 'freelancer', nome: 'Mateus Vieira',   id: 1 },
+  'empresa@demo.com':    { tipo: 'empresa',    nome: 'Lojafy Soluções', id: 2 },
 };
 const DEMO_SENHA = '12345678';
 
@@ -112,7 +112,7 @@ if (formLogin) {
       redirecionarDashboard(dados.tipo);
 
     } catch (err) {
-      mostrarErro('msg-error', 'Servidor indisponível. Use o modo demo: freelancer@demo.com');
+      mostrarErro('msg-error', 'Servidor indisponível. Use modo demo: freelancer@demo.com / 12345678');
       console.error(err);
     } finally {
       setLoading('btn-login', false);
@@ -144,7 +144,7 @@ if (formEmpresa) {
     e.preventDefault();
     ocultarErro('msg-error-empresa');
 
-    const senha    = formEmpresa.senha.value;
+    const senha     = formEmpresa.senha.value;
     const senhaConf = formEmpresa.senha_conf.value;
 
     if (senha !== senhaConf) {
@@ -221,7 +221,7 @@ async function enviarCadastro(payload, idErro) {
   }
 }
 
-// Máscaras
+// ─── Máscaras de input ───────────────────────────────────────
 document.getElementById('cnpj')?.addEventListener('input', (e) => {
   let v = e.target.value.replace(/\D/g, '');
   v = v.replace(/^(\d{2})(\d)/, '$1.$2');
