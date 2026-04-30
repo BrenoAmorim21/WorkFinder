@@ -3,17 +3,27 @@
 //  Feed de vagas reais via API com filtros funcionais
 // ============================================================
 
-let vagasCache   = [];
-let filtroArea   = 'todos';   // chips de área (server-side)
-let termoBusca   = '';
-let filtroOrdem  = 'recentes';
-let budgetMin    = 0;
-let budgetMax    = 999999;
+let vagasCache = [];
+let filtroArea = 'todos';   // chips de área (server-side)
+let termoBusca = '';
+let filtroOrdem = 'recentes';
+let budgetMin = 0;
+let budgetMax = 999999;
 
 // Sets para checkboxes — iniciam com tudo marcado
 let filtroModalidades = new Set(['remoto', 'presencial', 'hibrido']);
-let filtroTipos       = new Set(['projeto', 'freelance', 'part-time']);
-let filtroAreas       = new Set(['Desenvolvimento Web', 'Design Grafico / UI/UX', 'Desenvolvimento Mobile', 'Dados / BI', 'Marketing']);
+let filtroTipos = new Set(['projeto', 'freelance', 'part-time']);
+let filtroAreas = new Set(['Desenvolvimento Web', 'Design Grafico / UI/UX', 'Desenvolvimento Mobile', 'Dados / BI', 'Marketing']);
+
+async function carregarHeroStats() {
+    try {
+        const s = await API.get('/stats/plataforma');
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+        set('hero-vagas', s.vagas_abertas || 0);
+        set('hero-novos', s.novos_semana || 0);
+        if (s.media_hora > 0) set('hero-media', `R$${s.media_hora}`);
+    } catch (e) { }
+}
 
 // ── Carrega vagas do servidor ─────────────────────────────
 async function carregarVagas() {
@@ -46,8 +56,8 @@ function filtrarLocal(vagas) {
 // ── Ordenação ─────────────────────────────────────────────
 function ordenar(vagas) {
     return [...vagas].sort((a, b) => {
-        if (filtroOrdem === 'orcamento')  return (b.orcamento_max || 0) - (a.orcamento_max || 0);
-        if (filtroOrdem === 'propostas')  return (a.total_propostas || 0) - (b.total_propostas || 0);
+        if (filtroOrdem === 'orcamento') return (b.orcamento_max || 0) - (a.orcamento_max || 0);
+        if (filtroOrdem === 'propostas') return (a.total_propostas || 0) - (b.total_propostas || 0);
         return new Date(b.criado_em) - new Date(a.criado_em);
     });
 }
@@ -57,7 +67,7 @@ function atualizarContadores(vagas) {
     const cModal = {}, cTipo = {}, cArea = {};
     vagas.forEach(v => {
         cModal[v.modalidade] = (cModal[v.modalidade] || 0) + 1;
-        cTipo[v.tipo]        = (cTipo[v.tipo]        || 0) + 1;
+        cTipo[v.tipo] = (cTipo[v.tipo] || 0) + 1;
         if (v.area) cArea[v.area] = (cArea[v.area] || 0) + 1;
     });
     Object.entries(cModal).forEach(([k, n]) => {
@@ -76,7 +86,7 @@ function atualizarContadores(vagas) {
 
 // ── Render principal ──────────────────────────────────────
 function renderFeed() {
-    const grid   = document.getElementById('project-grid');
+    const grid = document.getElementById('project-grid');
     const countEl = document.getElementById('feed-count');
 
     atualizarContadores(vagasCache);
@@ -96,7 +106,7 @@ function renderFeed() {
 
 // ── Card de vaga ──────────────────────────────────────────
 function badgeModal(m) {
-    const map   = { remoto: 'badge-remoto', presencial: 'badge-presencial', hibrido: 'badge-hibrido' };
+    const map = { remoto: 'badge-remoto', presencial: 'badge-presencial', hibrido: 'badge-hibrido' };
     const label = { remoto: 'Remoto', presencial: 'Presencial', hibrido: 'Híbrido' };
     return `<span class="badge ${map[m] || ''}">${label[m] || m}</span>`;
 }
@@ -173,10 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-filter]').forEach(cb => {
         cb.addEventListener('change', () => {
             const tipo = cb.dataset.filter;
-            const val  = cb.value;
-            const set  = tipo === 'modalidade' ? filtroModalidades
-                       : tipo === 'tipo'        ? filtroTipos
-                       :                          filtroAreas;
+            const val = cb.value;
+            const set = tipo === 'modalidade' ? filtroModalidades
+                : tipo === 'tipo' ? filtroTipos
+                    : filtroAreas;
             cb.checked ? set.add(val) : set.delete(val);
             renderFeed();
         });
@@ -190,4 +200,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     carregarVagas();
+    carregarHeroStats();
 });

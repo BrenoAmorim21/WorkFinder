@@ -8,6 +8,7 @@ let skillsList = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
+    Notif.injetar('.nav-actions');
     if (Sessao.tipo !== 'empresa') { window.location.href = 'home.html'; return; }
 
     selecionarModalidade('remoto');
@@ -75,7 +76,7 @@ function atualizarPreview() {
     const orcamento = (min && max)
         ? `R$ ${Number(min).toLocaleString('pt-BR')} – R$ ${Number(max).toLocaleString('pt-BR')}`
         : min ? `A partir de R$ ${Number(min).toLocaleString('pt-BR')}`
-        : '–';
+            : '–';
 
     const labelModal = { remoto: 'Remoto', hibrido: 'Híbrido', presencial: 'Presencial' };
     const classModal = { remoto: 'badge-remoto', hibrido: 'badge-hibrido', presencial: 'badge-presencial' };

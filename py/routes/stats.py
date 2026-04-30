@@ -98,4 +98,18 @@ def stats_freelancer():
     ace = result.get('propostas_aceitas', 0)
     result['taxa_aceite'] = round((ace / env * 100) if env > 0 else 0, 1)
 
+@stats_bp.route('/plataforma', methods=['GET'])
+def stats_plataforma():
+    row = query_one('''
+        SELECT
+            (SELECT COUNT(*) FROM jobs WHERE status = 'aberta') AS vagas_abertas,
+            (SELECT COUNT(*) FROM jobs WHERE status = 'aberta' AND criado_em >= DATE_SUB(NOW(), INTERVAL 7 DAY))  AS novos_semana,
+            (SELECT COALESCE(ROUND(AVG(pretensao_hora), 0), 0) FROM freelancers WHERE pretensao_hora > 0)          AS media_hora
+    ''', {})
+    return jsonify({
+        'vagas_abertas': int(row['vagas_abertas'] or 0),
+        'novos_semana':  int(row['novos_semana']  or 0),
+        'media_hora':    int(row['media_hora']    or 0),
+    }), 200
+
     return jsonify(result), 200

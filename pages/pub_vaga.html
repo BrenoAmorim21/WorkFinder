@@ -22,7 +22,9 @@
       <div class="nav-logo">WF</div>
       WorkFinder
     </a>
-    <button class="btn-nav btn-nav-ghost" onclick="location.href='dash_empresa.html'">← Dashboard</button>
+    <div class="nav-actions">
+      <button class="btn-nav btn-nav-ghost" onclick="location.href='dash_empresa.html'">← Dashboard</button>
+    </div>
   </nav>
 
   <div class="page-wrap">
@@ -132,12 +134,12 @@
             <label for="inp-prazo">Prazo estimado</label>
             <select id="inp-prazo">
               <option value="">Selecione...</option>
-              <option>Até 1 semana</option>
-              <option>2–4 semanas</option>
-              <option>2 meses</option>
-              <option>3 meses</option>
-              <option>6 meses</option>
-              <option>A combinar</option>
+              <option value="7">Até 1 semana</option>
+              <option value="21">2–4 semanas</option>
+              <option value="60">2 meses</option>
+              <option value="90">3 meses</option>
+              <option value="180">6 meses</option>
+              <option value="">A combinar</option>
             </select>
           </div>
           <div class="form-group">
