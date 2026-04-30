@@ -50,17 +50,22 @@ async function enviarProposta() {
     if (!valor) { toast('Informe o valor da sua proposta.', 'error'); return; }
     if (!prazo) { toast('Informe o prazo que consegue entregar.', 'error'); return; }
     if (!msg) { toast('Escreva uma mensagem para a empresa.', 'error'); return; }
-    if (!vagaAtual) return;
+
+    // Garante que vagaAtual existe e tem id
+    if (!vagaAtual || !vagaAtual.id) {
+        toast('Erro: recarregue a página e tente novamente.', 'error');
+        return;
+    }
 
     const btn = document.querySelector('.btn-send');
     if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
 
     try {
         await API.post('/propostas', {
-            job_id: vagaAtual.id,
+            job_id: parseInt(vagaAtual.id, 10),          // FIX: garante inteiro
             mensagem: msg,
-            valor_proposto: Number(valor),
-            prazo_proposto: Number(prazo.replace(/\D/g, '')) || null,
+            valor_proposto: parseFloat(valor) || null,
+            prazo_proposto: parseInt(prazo, 10) || null,         // FIX: parseInt direto, sem replace
         });
         document.getElementById('form-proposta').style.display = 'none';
         document.getElementById('success-prop')?.classList.add('show');
