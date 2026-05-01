@@ -12,6 +12,8 @@ async function carregarPropostas() {
     if (!Sessao.token || Sessao.token === 'demo-token') return;
 
     todasPropostas = await API.get('/propostas/minhas');
+    atualizarContadores();
+    renderPropostas();
   } catch (e) {
     document.getElementById('prop-list').innerHTML =
       '<p style="color:#DC2626;padding:1rem;text-align:center">Erro ao carregar propostas. O servidor está rodando?</p>';
@@ -144,10 +146,10 @@ function setTab(el, filtro) {
 function fecharModal(id) { document.getElementById(id)?.classList.remove('open'); }
 
 document.addEventListener('DOMContentLoaded', () => {
-
   if (!Sessao.token || Sessao.token === 'demo-token') {
     document.getElementById('prop-list').innerHTML =
       '<p style="text-align:center;padding:2rem">Faça login real para ver suas propostas.</p>';
     return;
   }
+  carregarPropostas();
 });
