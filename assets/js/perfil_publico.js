@@ -2,6 +2,7 @@
 //  WorkFinder — assets/js/perfil_publico.js
 //  Perfil público de freelancer (leitura) — ?id=<freelancer_id>
 // ============================================================
+//ola
 
 let perfil = {};
 let avaliacoes = [];
@@ -27,10 +28,10 @@ function renderTudo() {
     const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || '–'; };
     const setHTML = (id, v) => { const el = document.getElementById(id); if (el) el.innerHTML = v || ''; };
 
-    set('pub-nome',    perfil.nome);
-    set('pub-titulo',  perfil.area ? `${perfil.area}${perfil.experiencia ? ' · ' + perfil.experiencia : ''}` : 'Freelancer');
-    set('pub-bio',     perfil.bio || 'Sem bio cadastrada.');
-    set('pub-cidade',  perfil.cidade && perfil.estado ? `${perfil.cidade}, ${perfil.estado}` : 'Não informado');
+    set('pub-nome', perfil.nome);
+    set('pub-titulo', perfil.area ? `${perfil.area}${perfil.experiencia ? ' · ' + perfil.experiencia : ''}` : 'Freelancer');
+    set('pub-bio', perfil.bio || 'Sem bio cadastrada.');
+    set('pub-cidade', perfil.cidade && perfil.estado ? `${perfil.cidade}, ${perfil.estado}` : 'Não informado');
     set('pub-portfolio', perfil.portfolio_url ? perfil.portfolio_url.replace('https://', '') : 'Não informado');
     set('pub-disponivel', perfil.disponivel ? 'Disponível para projetos' : 'Indisponível no momento');
     document.getElementById('pub-disponivel')?.classList.toggle('verde', !!perfil.disponivel);
@@ -89,17 +90,17 @@ function renderAvaliacoes() {
                 <div style="font-size:.75rem;color:#92400E">${avaliacoes.length} avaliação${avaliacoes.length !== 1 ? 'ões' : ''}</div>
             </div>
             <div style="flex:1">
-                ${[5,4,3,2,1].map(n => {
-                    const qty = avaliacoes.filter(a => a.nota === n).length;
-                    const pct = Math.round(qty / avaliacoes.length * 100);
-                    return `<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
+                ${[5, 4, 3, 2, 1].map(n => {
+        const qty = avaliacoes.filter(a => a.nota === n).length;
+        const pct = Math.round(qty / avaliacoes.length * 100);
+        return `<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem">
                         <span style="font-size:.75rem;color:#92400E;width:10px">${n}</span>
                         <div style="flex:1;background:#FEF3C7;border-radius:4px;height:7px;overflow:hidden">
                             <div style="width:${pct}%;height:100%;background:#F59E0B;border-radius:4px"></div>
                         </div>
                         <span style="font-size:.72rem;color:#92400E;width:24px">${qty}</span>
                     </div>`;
-                }).join('')}
+    }).join('')}
             </div>
         </div>
         ${avaliacoes.map((a, i) => `
