@@ -36,7 +36,10 @@ function renderContratos() {
         document.getElementById('banner-inicio').textContent = fmtData(a.iniciado_em);
 
         const actions = document.getElementById('banner-actions');
+        const parceiroEscB = (parceiro || '').replace(/'/g, "\\'");
+        const tituloEscB = a.vaga_titulo.replace(/'/g, "\\'");
         actions.innerHTML = `
+            <button class="btn-banner btn-banner-ghost" onclick="abrirChat(${a.id}, '${tituloEscB}', '${parceiroEscB}')">💬 Chat</button>
             <button class="btn-banner btn-banner-green" onclick="concluirContrato(${a.id})">✓ Marcar concluído</button>
             <button class="btn-banner btn-banner-ghost" onclick="cancelarContrato(${a.id})">Cancelar</button>
         `;
@@ -68,7 +71,10 @@ function renderSecao(secaoId, listaId, items) {
 
         let actionsHTML = '';
         if (ct.status === 'em_andamento') {
+            const parceiroEsc = parceiro.replace(/'/g, "\\'");
+            const tituloEsc = ct.vaga_titulo.replace(/'/g, "\\'");
             actionsHTML = `
+                <button class="btn-chat" onclick="abrirChat(${ct.id}, '${tituloEsc}', '${parceiroEsc}')">💬 Chat</button>
                 <button class="btn-ct btn-ct-green" onclick="concluirContrato(${ct.id})">✓ Concluir</button>
                 <button class="btn-ct btn-ct-outline" onclick="cancelarContrato(${ct.id})">Cancelar</button>
             `;
@@ -230,4 +236,131 @@ document.addEventListener('DOMContentLoaded', () => {
     Notif.injetar('.nav-actions');
     carregarContratos();
     setInterval(carregarContratos, 30000);
+});
+
+// ============================================================
+//  CHAT — frontend
+// ============================================================
+let chatContractId = null;
+let chatPollTimer = null;
+let chatLastMsgId = 0;
+
+async function abrirChat(contractId, vagaTitulo, parceiro) {
+    chatContractId = contractId;
+    chatLastMsgId = 0;
+    document.getElementById('chat-title').textContent = parceiro;
+    document.getElementById('chat-subtitle').textContent = vagaTitulo;
+    document.getElementById('chat-body').innerHTML = '<div class="chat-empty">Carregando...</div>';
+    document.getElementById('chat-overlay').classList.add('open');
+    document.getElementById('chat-input').value = '';
+
+    await carregarMensagens();
+    marcarLidas();
+    iniciarPolling();
+    setTimeout(() => document.getElementById('chat-input').focus(), 100);
+}
+
+function fecharChat() {
+    document.getElementById('chat-overlay').classList.remove('open');
+    pararPolling();
+    chatContractId = null;
+}
+
+function fecharChatFora(e) {
+    if (e.target.id === 'chat-overlay') fecharChat();
+}
+
+async function carregarMensagens() {
+    if (!chatContractId) return;
+    try {
+        const msgs = await API.get(`/mensagens/${chatContractId}`);
+        renderMensagens(msgs);
+        if (msgs.length > 0) chatLastMsgId = msgs[msgs.length - 1].id;
+    } catch (e) {
+        document.getElementById('chat-body').innerHTML =
+            '<div class="chat-empty" style="color:#DC2626">Erro ao carregar mensagens.</div>';
+    }
+}
+
+function renderMensagens(msgs) {
+    const body = document.getElementById('chat-body');
+    if (!msgs || msgs.length === 0) {
+        body.innerHTML = '<div class="chat-empty">Nenhuma mensagem ainda. Diga olá! 👋</div>';
+        return;
+    }
+    body.innerHTML = msgs.map(m => {
+        const cls = m.eu_enviei ? 'chat-msg-mine' : 'chat-msg-theirs';
+        const hora = new Date(m.criado_em.replace(' ', 'T')).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const conteudoEscapado = (m.conteudo || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<div class="chat-msg ${cls}">${conteudoEscapado}<div class="chat-msg-time">${hora}</div></div>`;
+    }).join('');
+    body.scrollTop = body.scrollHeight;
+}
+
+async function enviarMensagem() {
+    const input = document.getElementById('chat-input');
+    const btn = document.getElementById('chat-send');
+    const conteudo = input.value.trim();
+    if (!conteudo || !chatContractId) return;
+
+    btn.disabled = true;
+    try {
+        await API.post(`/mensagens/${chatContractId}`, { conteudo });
+        input.value = '';
+        input.style.height = 'auto';
+        await carregarMensagens();
+    } catch (e) {
+        toast(e.mensagem || 'Erro ao enviar mensagem.', 'erro');
+    } finally {
+        btn.disabled = false;
+        input.focus();
+    }
+}
+
+function chatKeydown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        enviarMensagem();
+    }
+}
+
+async function marcarLidas() {
+    if (!chatContractId) return;
+    try { await API.post(`/mensagens/${chatContractId}/lidas`, {}); } catch (e) { /* silencioso */ }
+}
+
+function iniciarPolling() {
+    pararPolling();
+    chatPollTimer = setInterval(async () => {
+        if (!chatContractId) { pararPolling(); return; }
+        const msgs = await API.get(`/mensagens/${chatContractId}`).catch(() => null);
+        if (!msgs) return;
+        const ultimo = msgs.length > 0 ? msgs[msgs.length - 1].id : 0;
+        if (ultimo > chatLastMsgId) {
+            renderMensagens(msgs);
+            chatLastMsgId = ultimo;
+            marcarLidas();
+        }
+    }, 4000);
+}
+
+function pararPolling() {
+    if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; }
+}
+
+// Deep-link: abre chat automaticamente se URL tiver ?abrir_chat=ID
+window.addEventListener('load', () => {
+    const params = new URLSearchParams(location.search);
+    const cid = params.get('abrir_chat');
+    if (cid) {
+        setTimeout(async () => {
+            const meus = await API.get('/contratos/meus').catch(() => []);
+            const contrato = meus.find(c => String(c.id) === String(cid));
+            if (contrato && contrato.status === 'em_andamento') {
+                const parceiro = Sessao.tipo === 'empresa' ? contrato.freelancer_nome : contrato.nome_empresa;
+                abrirChat(contrato.id, contrato.vaga_titulo, parceiro);
+            }
+        }, 600);
+    }
 });

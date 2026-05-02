@@ -53,7 +53,7 @@ def listar():
     sql = """
         SELECT j.*,
                c.nome_empresa, c.cidade AS empresa_cidade, c.verificada,
-               COUNT(DISTINCT p.id) AS total_propostas
+               COUNT(DISTINCT CASE WHEN p.status = 'pendente' THEN p.id END) AS total_propostas
         FROM jobs j
         JOIN companies c ON c.id = j.company_id
         LEFT JOIN proposals p ON p.job_id = j.id
@@ -97,7 +97,7 @@ def meus():
         return jsonify({'mensagem': 'Perfil de empresa não encontrado.'}), 404
 
     rows = query_all('''
-        SELECT j.*, COUNT(DISTINCT p.id) AS total_propostas
+        SELECT j.*, COUNT(DISTINCT CASE WHEN p.status = 'pendente' THEN p.id END) AS total_propostas
         FROM jobs j
         LEFT JOIN proposals p ON p.job_id = j.id
         WHERE j.company_id = %s

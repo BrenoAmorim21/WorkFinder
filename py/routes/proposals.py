@@ -67,6 +67,15 @@ def enviar():
     conn = get_conn()
     cur  = conn.cursor()
     try:
+        # Verifica se já enviou proposta pra essa vaga
+        ja_existe = query_one(
+            'SELECT id, status FROM proposals WHERE job_id=%s AND freelancer_id=%s',
+            (job_id, freelancer_id)
+        )
+        if ja_existe:
+            return jsonify({
+                'mensagem': f'Você já enviou uma proposta para essa vaga (status: {ja_existe["status"]}).'
+            }), 409
         cur.execute('''
             INSERT INTO proposals (job_id, freelancer_id, mensagem, valor_proposto, prazo_proposto)
             VALUES (%s, %s, %s, %s, %s)
@@ -101,6 +110,22 @@ def enviar():
         cur.close()
         conn.close()
 
+@proposals_bp.route('/minhas-vagas', methods=['GET'])
+@login_required
+def minhas_vagas_aplicadas():
+    """Retorna lista de job_ids onde o freelancer já enviou proposta (qualquer status)."""
+    if g.user_tipo != 'freelancer':
+        return jsonify([]), 200
+
+    freelancer_id = _get_freelancer_id(g.user_id)
+    if not freelancer_id:
+        return jsonify([]), 200
+
+    rows = query_all(
+        'SELECT job_id, status FROM proposals WHERE freelancer_id=%s',
+        (freelancer_id,)
+    )
+    return jsonify(rows), 200
 
 # ─── MINHAS PROPOSTAS (freelancer) ─────────────────────────
 

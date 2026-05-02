@@ -9,6 +9,7 @@ from routes.reviews import reviews_bp
 from routes.users import users_bp
 from routes.stats import stats_bp
 from routes.notifications import notif_bp
+from routes.messages import messages_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -22,6 +23,7 @@ app.register_blueprint(reviews_bp,   url_prefix='/api/avaliacoes')
 app.register_blueprint(users_bp,     url_prefix='/api/usuarios')
 app.register_blueprint(stats_bp,     url_prefix='/api/stats')
 app.register_blueprint(notif_bp,     url_prefix='/api/notificacoes')
+app.register_blueprint(messages_bp,   url_prefix='/api/mensagens')
 
 @app.route('/api/ping')
 def ping():

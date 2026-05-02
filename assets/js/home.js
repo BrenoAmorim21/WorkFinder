@@ -9,6 +9,7 @@ let termoBusca = '';
 let filtroOrdem = 'recentes';
 let budgetMin = 0;
 let budgetMax = 999999;
+let vagasJaAplicadas = new Set();  // job_ids onde o freelancer já enviou proposta
 
 // Sets para checkboxes — iniciam com tudo marcado
 let filtroModalidades = new Set(['remoto', 'presencial', 'hibrido']);
@@ -32,9 +33,17 @@ async function carregarVagas() {
     try {
         const p = new URLSearchParams();
         if (termoBusca) p.set('busca', termoBusca);
-        // Área via chip usa filtro único; sidebar usa client-side
         if (filtroArea !== 'todos') p.set('area', filtroArea);
-        vagasCache = await API.get('/vagas?' + p.toString());
+
+        // Carrega vagas e candidaturas existentes em paralelo
+        const [vagas, minhasVagas] = await Promise.all([
+            API.get('/vagas?' + p.toString()),
+            Sessao.tipo === 'freelancer'
+                ? API.get('/propostas/minhas-vagas').catch(() => [])
+                : Promise.resolve([])
+        ]);
+        vagasCache = vagas;
+        vagasJaAplicadas = new Set(minhasVagas.map(p => p.job_id));
         renderFeed();
     } catch (e) {
         grid.innerHTML = '<p style="text-align:center;color:#DC2626;padding:2rem">Erro ao carregar projetos. O servidor está rodando?</p>';
@@ -146,7 +155,9 @@ function renderCard(v) {
           <span class="meta-item">👥 ${v.total_propostas || 0} proposta${v.total_propostas !== 1 ? 's' : ''}</span>
           <span class="meta-item">${fmtRelativo(v.criado_em)}</span>
         </div>
-        <button class="btn-apply" onclick="event.stopPropagation();abrirVaga(${v.id})">Enviar proposta</button>
+        ${vagasJaAplicadas.has(v.id)
+            ? `<button class="btn-apply" disabled style="background:#E2E8F0;color:#64748B;cursor:not-allowed">✓ Proposta enviada</button>`
+            : `<button class="btn-apply" onclick="event.stopPropagation();abrirVaga(${v.id})">Enviar proposta</button>`}
       </div>
     </div>`;
 }

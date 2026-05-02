@@ -184,3 +184,21 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 CREATE INDEX idx_notif_user ON notifications (user_id, lida);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id INT NOT NULL AUTO_INCREMENT,
+    contract_id INT NOT NULL,
+    sender_user_id INT NOT NULL,
+    conteudo TEXT NOT NULL,
+    lida TINYINT(1) NOT NULL DEFAULT 0,
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (contract_id) REFERENCES contracts (id) ON DELETE CASCADE,
+    FOREIGN KEY (sender_user_id) REFERENCES users (id) ON DELETE CASCADE,
+    INDEX idx_msg_contract (contract_id, criado_em),
+    INDEX idx_msg_unread (
+        contract_id,
+        sender_user_id,
+        lida
+    )
+);

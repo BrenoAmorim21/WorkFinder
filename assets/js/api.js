@@ -3,7 +3,9 @@
 //  Cliente central da API. Importar em todas as páginas.
 // ============================================================
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+    ? 'http://localhost:5000/api'
+    : '/api';
 
 // ── Helpers de sessão ─────────────────────────────────────
 const Sessao = {
@@ -73,7 +75,9 @@ function fmtMoeda(v) {
 
 function fmtData(s) {
     if (!s) return '–';
-    return new Intl.DateTimeFormat('pt-BR').format(new Date(s));
+    const d = new Date(s);
+    if (isNaN(d.getTime()) || d.getTime() < 86400000) return '–';  // bloqueia null, NaN, e datas <= 01/01/1970
+    return new Intl.DateTimeFormat('pt-BR').format(d);
 }
 
 function fmtRelativo(s) {
