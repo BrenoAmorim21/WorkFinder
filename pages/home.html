@@ -37,6 +37,8 @@
       <div class="avatar" id="avatar-home" onclick="window.location.href='perfil-freelancer.html'" title="Ver perfil">MV
       </div>
     </div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+      aria-label="Menu">☰</button>
   </nav>
 
   <!-- ── Hero ── -->
@@ -66,6 +68,8 @@
     <!-- Sidebar de filtros -->
     <aside class="sidebar">
       <div class="sidebar-card">
+        <button class="sidebar-close" onclick="document.querySelector('.sidebar').classList.remove('open')"
+          aria-label="Fechar">×</button>
         <div class="sidebar-title">Filtros</div>
 
         <div class="filter-group">
@@ -150,6 +154,16 @@
 
     <!-- Feed principal -->
     <main>
+      <div class="mobile-search">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="m21 21-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0Z" />
+        </svg>
+        <input type="text" id="mobile-search-input" placeholder="Buscar projetos..." />
+      </div>
+      <button class="mobile-filter-btn" onclick="document.querySelector('.sidebar').classList.add('open')">
+        ⚙ Filtros
+      </button>
       <div class="feed-header">
         <span class="feed-title" id="feed-count">Carregando...</span>
         <div class="feed-sort">

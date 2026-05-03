@@ -190,6 +190,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Injeta sino de notificações
     Notif.injetar('#nav-actions-home');
 
+    // Sincroniza busca mobile com a busca principal
+    const mobileSearch = document.getElementById('mobile-search-input');
+    if (mobileSearch) {
+        mobileSearch.addEventListener('input', e => {
+            termoBusca = e.target.value;
+            clearTimeout(window._searchT);
+            window._searchT = setTimeout(carregarVagas, 400);
+        });
+    }
+
+    // Fecha sidebar/menu ao clicar fora
+    document.querySelector('.sidebar')?.addEventListener('click', e => {
+        if (e.target.classList.contains('sidebar')) {
+            e.target.classList.remove('open');
+        }
+    });
+
     // Checkboxes de modalidade, tipo e área
     document.querySelectorAll('[data-filter]').forEach(cb => {
         cb.addEventListener('change', () => {
