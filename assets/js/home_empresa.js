@@ -73,6 +73,7 @@ function renderCard(f) {
 
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
+    Notif.injetar('#nav-notif-slot');
     if (Sessao.tipo !== 'empresa') { window.location.href = 'home.html'; return; }
 
     // Filtros de área

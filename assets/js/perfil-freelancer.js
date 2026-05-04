@@ -184,6 +184,6 @@ function setTab(el, tab) {
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
     if (Sessao.tipo !== 'freelancer') { window.location.href = 'dash_empresa.html'; return; }
-    Notif.injetar('.nav-actions');
+    Notif.injetar('#nav-notif-slot');
     carregarPerfil();
 });

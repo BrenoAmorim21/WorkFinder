@@ -17,16 +17,18 @@
 <body>
 
   <nav class="navbar">
-    <a href="#" class="nav-brand">
+    <a href="dash_empresa.html" class="nav-brand">
       <div class="nav-logo">WF</div>
       WorkFinder
     </a>
+    <div id="nav-notif-slot" style="display:flex;align-items:center;margin-left:auto"></div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+      aria-label="Menu">☰</button>
     <div class="nav-actions" id="nav-actions-dash">
       <button class="btn-nav btn-nav-ghost" onclick="location.href='perfil_empresa.html'">Perfil</button>
       <button class="btn-nav btn-nav-ghost" onclick="location.href='home_empresa.html'">Encontrar freelancers</button>
       <button class="btn-nav btn-nav-ghost" onclick="location.href='contratos.html'">Contratos</button>
       <button class="btn-nav btn-nav-primary" onclick="location.href='pub_vaga.html'">+ Publicar projeto</button>
-      <div class="avatar" id="avatar-empresa" title="">LS</div>
       <button class="btn-nav btn-nav-danger" onclick="sair()">Sair</button>
     </div>
   </nav>

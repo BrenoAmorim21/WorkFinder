@@ -20,7 +20,13 @@
       <div class="nav-logo">WF</div>
       WorkFinder
     </a>
-    <button class="btn-nav btn-nav-ghost" onclick="location.href='home.html'">← Explorar projetos</button>
+    <div id="nav-notif-slot" style="display:flex;align-items:center;margin-left:auto"></div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+      aria-label="Menu">☰</button>
+    <div class="nav-actions">
+      <button class="btn-nav btn-nav-ghost" onclick="location.href='home.html'">← Explorar projetos</button>
+      <button class="btn-nav btn-nav-danger" onclick="sair()">Sair</button>
+    </div>
   </nav>
 
   <!-- Breadcrumb -->

@@ -18,13 +18,17 @@
 
   <!-- Navbar -->
   <nav class="navbar">
-    <a href="home.html" class="nav-brand">
+    <a href="dash_empresa.html" class="nav-brand">
       <div class="nav-logo">WF</div>
       WorkFinder
     </a>
+    <div id="nav-notif-slot" style="display:flex;align-items:center;margin-left:auto"></div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+      aria-label="Menu">☰</button>
     <div class="nav-actions" id="nav-actions-empresa">
       <button class="btn-nav btn-nav-ghost" onclick="history.back()">← Voltar</button>
       <button class="btn-nav btn-nav-primary" onclick="location.href='pub_vaga.html'">+ Publicar projeto</button>
+      <button class="btn-nav btn-nav-danger" onclick="sair()">Sair</button>
     </div>
   </nav>
 

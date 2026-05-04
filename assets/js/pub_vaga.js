@@ -8,7 +8,7 @@ let skillsList = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
-    Notif.injetar('.nav-actions');
+    Notif.injetar('#nav-notif-slot');
     if (Sessao.tipo !== 'empresa') { window.location.href = 'home.html'; return; }
 
     selecionarModalidade('remoto');

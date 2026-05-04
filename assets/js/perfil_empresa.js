@@ -217,6 +217,6 @@ function abrirProjeto(id) { window.location.href = `detal_vaga.html?id=${id}`; }
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
     if (Sessao.tipo !== 'empresa') { window.location.href = 'home.html'; return; }
-    Notif.injetar('#nav-actions-empresa');
+    Notif.injetar('#nav-notif-slot');
     carregarPerfil();
 });

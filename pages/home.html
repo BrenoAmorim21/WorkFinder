@@ -21,7 +21,6 @@
       <div class="nav-logo">WF</div>
       WorkFinder
     </a>
-
     <div class="nav-search">
       <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round"
@@ -29,16 +28,26 @@
       </svg>
       <input type="text" id="search-input" placeholder="Buscar projetos, habilidades..." />
     </div>
-
+    <div id="nav-notif-slot" style="display:flex;align-items:center;margin-left:auto"></div>
+    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+      aria-label="Menu">☰</button>
     <div class="nav-actions" id="nav-actions-home">
       <button class="btn-nav btn-nav-ghost" onclick="window.location.href='perfil-freelancer.html'">Meu Perfil</button>
       <button class="btn-nav btn-nav-ghost" onclick="location.href='propostas.html'">Propostas</button>
       <button class="btn-nav btn-nav-ghost" onclick="location.href='contratos.html'">Contratos</button>
-      <div class="avatar" id="avatar-home" onclick="window.location.href='perfil-freelancer.html'" title="Ver perfil">MV
-      </div>
+      <button class="btn-nav btn-nav-danger" onclick="sair()">Sair</button>
     </div>
-    <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
-      aria-label="Menu">☰</button>
+  </nav>
+
+  <div class="nav-actions" id="nav-actions-home">
+    <button class="btn-nav btn-nav-ghost" onclick="window.location.href='perfil-freelancer.html'">Meu Perfil</button>
+    <button class="btn-nav btn-nav-ghost" onclick="location.href='propostas.html'">Propostas</button>
+    <button class="btn-nav btn-nav-ghost" onclick="location.href='contratos.html'">Contratos</button>
+    <div class="avatar" id="avatar-home" onclick="window.location.href='perfil-freelancer.html'" title="Ver perfil">MV
+    </div>
+  </div>
+  <button class="nav-hamburger" onclick="document.querySelector('.nav-actions').classList.toggle('open')"
+    aria-label="Menu">☰</button>
   </nav>
 
   <!-- ── Hero ── -->

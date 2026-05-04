@@ -181,5 +181,6 @@ function salvarVaga(btn) {
 
 document.addEventListener('DOMContentLoaded', () => {
     Sessao.exigir();
+    Notif.injetar('#nav-notif-slot');
     carregarVaga();
 });

@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (av) av.textContent = iniciais(nome);
 
     // Injeta sino de notificações
-    Notif.injetar('#nav-actions-home');
+    Notif.injetar('#nav-notif-slot');
 
     // Sincroniza busca mobile com a busca principal
     const mobileSearch = document.getElementById('mobile-search-input');

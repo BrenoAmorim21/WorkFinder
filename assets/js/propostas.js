@@ -158,6 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     b1.textContent = 'Explorar projetos'; b1.onclick = () => location.href = 'home.html';
     b2.textContent = 'Meu perfil'; b2.onclick = () => location.href = 'perfil-freelancer.html';
   }
-
+  Notif.injetar('#nav-notif-slot');
   carregarPropostas();
 });
